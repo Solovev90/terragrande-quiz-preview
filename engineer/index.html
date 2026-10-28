@@ -1,0 +1,783 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Изыскания и проектирование наружных сетей и сооружений · ТерраГрандэ</title>
+<meta name="description" content="Изыскания и проектирование КОС, ВОС, КНС, ВНС, РЧВ, ЛОС, наружных водопроводов, канализации и газопроводов. Полный комплекс ПИР своими силами, гарантия положительного заключения.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Unbounded:wght@400;500&display=swap">
+<!--
+  ПРОТОТИП КВИЗА TerraGrande · контур 04 · v3 · 2026-10-28 · страница: engineer
+  Четыре квиза (решения владельца 28.10): две кампании Директа, в каждой глубокий и лёгкий вариант:
+    terragrande-quiz-engineer-v3.html       — инженерный, 7 вопросов (ГИП, генподрядчик, заказчик с ТЗ);
+    terragrande-quiz-engineer-lite-v3.html  — инженерный лёгкий, 4 вопроса;
+    terragrande-quiz-business-v3.html       — собственники и девелоперы, 6 вопросов;
+    terragrande-quiz-business-lite-v3.html  — собственники и девелоперы лёгкий, 4 вопроса.
+  Фокус заказчика 28.10 (письменный ответ): наружные сети (водо-, газопроводы), инженерные
+  сооружения КОС, ВОС, КНС, ВНС, РЧВ, ЛОС; полный комплекс ПИР своими силами. Архитектуру, внутренние сети, гостиницы как архитектуру,
+  частные дома не показываем.
+  Стиль снят с terragrande.ru (css/styles.css?v=20260817a). Заявка НИКУДА НЕ ОТПРАВЛЯЕТСЯ:
+  собирается в объект и пишется в консоль. Отправку и Метрику подключает кодовый агент:
+  цель *_submit строго один раз и только после ответа сервера «принято»; ?object=, UTM и yclid
+  должны дойти до заявки и пережить редиректы. Номера целей step_N закреплены за вопросом.
+  Параметры адреса: ?object=<код> (инженерный: kos los vos rchv kns net gas izy) или метка
+  utm_campaign с этим кодом — меняет заголовок и предвыбирает первый вопрос.
+-->
+<style>
+
+:root{
+  color-scheme:dark;
+  --bg:#0c0806;--surface:#1a120e;--surface-2:#2e1e15;--ink:#faf2e6;--muted:#ccb592;
+  --line:rgba(224,186,118,.24);--line-soft:rgba(224,186,118,.08);--glass:rgba(16,11,8,.84);
+  --accent:#e0ba76;--accent-2:#f2dcb0;--dark-ink:#0c0806;
+  --button-bg:#e0ba76;--button-hover:#ebc98c;--button-ink:#140d09;
+  --danger:#e0968e;--header-bg:rgba(14,9,7,.94);--panel-bg:#140e0a;--card-bg:rgba(26,18,14,.97);
+  --card-hover:#3a261c;--field-bg:rgba(247,239,228,.05);--footer-bg:#080504;
+  --hero-ink:#fff7ec;--footer-muted:#b49a7c;--shadow:rgba(0,0,0,.62);
+  --header:4.75rem;--max:77.5rem;
+  --display:"Unbounded","Arial Narrow",sans-serif;--text:"Inter",system-ui,sans-serif;
+  --gutter:2.5rem;--gutter-sm:1.5rem;--gutter-xs:1.125rem;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{font-size:110%;background:var(--bg);-webkit-text-size-adjust:100%}
+body{margin:0;overflow-x:hidden;background:var(--bg);color:var(--ink);font:400 1rem/1.55 var(--text);-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;
+  background:repeating-linear-gradient(90deg,transparent 0,transparent calc(25% - 1px),var(--line-soft) calc(25% - 1px),var(--line-soft) 25%)}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button,input,select,textarea{font:inherit;color:inherit}
+[hidden]{display:none!important}
+.container{width:min(100% - var(--gutter)*2,var(--max));margin-inline:auto}
+
+/* ---------- шапка, как на сайте ---------- */
+.site-header{position:sticky;top:0;z-index:50;height:var(--header);border-bottom:1px solid color-mix(in srgb,var(--accent) 24%,var(--line));background:var(--header-bg);backdrop-filter:blur(18px) saturate(1.12)}
+.header-inner{height:100%;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.brand{display:inline-flex;align-items:center;gap:.7rem;min-width:max-content}
+.brand img{height:42px;width:auto}
+.brand__text{font-family:var(--display);font-size:clamp(.68rem,.95vw,.82rem);font-weight:500;letter-spacing:.08em;line-height:1;text-transform:uppercase;color:var(--accent);white-space:nowrap}
+.header-contact{display:flex;align-items:center;gap:18px}
+.header-hours{color:var(--muted);font-size:.65rem;letter-spacing:.08em;text-transform:uppercase}
+.header-phone{color:var(--accent);font-size:.8rem;font-weight:600;white-space:nowrap}
+.header-call{display:none;width:44px;height:44px;align-items:center;justify-content:center;border:1px solid var(--line);color:var(--accent)}
+
+/* ---------- кнопки, как на сайте ---------- */
+.btn{display:inline-flex;min-height:48px;align-items:center;justify-content:center;gap:10px;padding:14px 26px;border:1px solid var(--line);border-radius:0;background:var(--field-bg);color:var(--ink);cursor:pointer;font-size:.69rem;font-weight:700;letter-spacing:.1em;text-align:center;text-transform:uppercase;transition:.2s}
+.btn:hover,.btn:focus-visible{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 15%,transparent);outline:0}
+.btn--accent{border-color:transparent;background:linear-gradient(180deg,color-mix(in srgb,var(--button-hover) 55%,#fff) 0%,var(--button-bg) 42%,color-mix(in srgb,var(--button-bg) 82%,#000) 100%);color:var(--button-ink);box-shadow:inset 0 1px 0 color-mix(in srgb,#fff 28%,transparent),0 10px 28px color-mix(in srgb,var(--button-bg) 28%,transparent);letter-spacing:.12em}
+.btn--accent:hover,.btn--accent:focus-visible{border-color:transparent;background:linear-gradient(180deg,color-mix(in srgb,var(--button-hover) 70%,#fff) 0%,var(--button-hover) 48%,var(--button-bg) 100%);color:var(--button-ink)}
+.btn[disabled]{opacity:.38;cursor:not-allowed;box-shadow:none}
+.btn--ghost{background:transparent}
+
+.kicker{display:flex;align-items:center;gap:12px;margin:0 0 14px;color:var(--accent);font-size:.67rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase}
+.kicker::before{content:"";width:48px;height:1px;background:linear-gradient(90deg,var(--accent),transparent)}
+
+/* ---------- первый экран и развилка ---------- */
+.intro{position:relative;isolation:isolate;padding:clamp(48px,7vw,96px) 0 clamp(40px,5vw,72px);border-bottom:1px solid var(--line)}
+.intro__bg{position:absolute;inset:0;z-index:-1;background:
+  linear-gradient(180deg,rgba(8,5,3,.80) 0%,rgba(8,5,3,.55) 40%,rgba(8,5,3,.98) 100%),
+  linear-gradient(90deg,rgba(8,5,3,.92),rgba(8,5,3,.2) 75%),
+  url("https://terragrande.ru/assets/images/hero-main.webp") center/cover no-repeat, var(--surface);
+  filter:saturate(.74) sepia(.1) contrast(1.05)}
+.intro h1{max-width:980px;margin:0 0 18px;font-family:var(--display);font-size:clamp(1.6rem,3.8vw,3.1rem);font-weight:400;line-height:1.16;letter-spacing:-.025em;text-transform:uppercase;text-wrap:balance;color:var(--hero-ink)}
+.intro__lead{max-width:660px;margin:0 0 36px;color:var(--muted);font-size:.9rem}
+.fork{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:980px}
+.fork-card{position:relative;display:flex;flex-direction:column;gap:10px;padding:26px;border:1px solid var(--line);background:var(--card-bg);text-align:left;cursor:pointer;transition:border-color .28s,background-color .28s,box-shadow .28s}
+.fork-card::before{content:"";position:absolute;inset:0 auto 0 0;width:0;background:var(--accent);transition:width .28s}
+.fork-card:hover,.fork-card:focus-visible{outline:0;border-color:color-mix(in srgb,var(--accent) 78%,var(--line));background:var(--card-hover);box-shadow:0 18px 40px var(--shadow)}
+.fork-card:hover::before,.fork-card:focus-visible::before{width:4px}
+.tag{display:inline-flex;align-self:flex-start;padding:6px 10px;border:1px solid color-mix(in srgb,var(--accent) 58%,transparent);background:color-mix(in srgb,var(--accent) 16%,transparent);color:var(--accent-2);font-size:.58rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase}
+.fork-card h2{margin:6px 0 0;font-family:var(--display);font-size:clamp(1rem,1.7vw,1.35rem);font-weight:400;line-height:1.22;text-transform:uppercase}
+.fork-card p{margin:0 0 12px;color:var(--muted);font-size:.76rem;line-height:1.55}
+.fork-card .btn{margin-top:auto;align-self:flex-start;pointer-events:none}
+.facts{display:flex;flex-wrap:wrap;gap:1px;max-width:980px;margin-top:28px;border:1px solid var(--line);background:var(--line)}
+.fact{flex:1 1 200px;padding:14px 16px;background:rgba(12,8,5,.86);font-size:.7rem;line-height:1.45;color:var(--muted)}
+.fact strong{display:block;margin-bottom:3px;color:var(--hero-ink);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase}
+
+/* ---------- квиз ---------- */
+.quiz-wrap{padding:clamp(28px,4vw,56px) 0 clamp(48px,6vw,88px)}
+.quiz-grid{display:grid;grid-template-columns:minmax(0,1fr) 20rem;gap:clamp(24px,3.5vw,48px);align-items:start}
+.quiz{border:1px solid var(--line);background:var(--panel-bg);scroll-margin-top:calc(var(--header) + 16px)}
+.quiz__top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 26px;border-bottom:1px solid var(--line)}
+.quiz__mode{color:var(--accent);font-size:.62rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase}
+.quiz__count{color:var(--muted);font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}
+.progress{height:3px;background:var(--line-soft)}
+.progress__bar{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent-2));transition:width .35s ease}
+.quiz__body{padding:clamp(22px,3vw,40px) 26px 28px}
+.q-title{margin:0 0 8px;font-family:var(--display);font-size:clamp(1.1rem,2.1vw,1.6rem);font-weight:400;line-height:1.22;letter-spacing:-.015em;text-transform:uppercase;text-wrap:balance}
+.q-hint{margin:0 0 22px;color:var(--muted);font-size:.74rem}
+.options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.opt{position:relative;display:flex;align-items:flex-start;gap:14px;min-height:64px;padding:15px 16px;border:1px solid var(--line);background:var(--field-bg);text-align:left;cursor:pointer;transition:border-color .2s,background-color .2s}
+.opt:hover{border-color:color-mix(in srgb,var(--accent) 60%,var(--line));background:color-mix(in srgb,var(--accent) 7%,transparent)}
+.opt:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.opt__mark{flex:0 0 18px;width:18px;height:18px;margin-top:2px;border:1px solid color-mix(in srgb,var(--accent) 55%,var(--line));display:grid;place-items:center}
+.opt--multi .opt__mark{border-radius:0}
+.opt:not(.opt--multi) .opt__mark{border-radius:50%}
+.opt__mark::after{content:"";width:8px;height:8px;background:var(--accent);transform:scale(0);transition:transform .15s}
+.opt:not(.opt--multi) .opt__mark::after{border-radius:50%}
+.opt__text{display:flex;flex-direction:column;gap:3px;min-width:0}
+.opt__title{font-size:.8rem;font-weight:600;line-height:1.35}
+.opt__desc{color:var(--muted);font-size:.68rem;line-height:1.45}
+.opt[aria-pressed="true"],.opt[aria-checked="true"]{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 13%,transparent);box-shadow:inset 3px 0 0 var(--accent)}
+.opt[aria-pressed="true"] .opt__mark::after,.opt[aria-checked="true"] .opt__mark::after{transform:scale(1)}
+.opt--unsure .opt__title{color:var(--muted);font-weight:500}
+.quiz__nav{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 26px;border-top:1px solid var(--line)}
+.quiz__nav .btn--ghost{padding-inline:18px}
+.nav-note{color:var(--muted);font-size:.65rem;letter-spacing:.06em}
+
+/* форма контактов */
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 12px}
+.field{min-width:0}
+.field--full{grid-column:1/-1}
+.field label,.field .label{display:block;margin-bottom:6px;color:var(--muted);font-size:.65rem;letter-spacing:.08em;text-transform:uppercase}
+.field input,.field select{width:100%;height:48px;padding:0 13px;border:1px solid var(--line);border-radius:0;outline:0;background:var(--field-bg);color:var(--ink)}
+.field select{appearance:none;padding-right:2rem;background-image:linear-gradient(45deg,transparent 50%,var(--accent) 50%),linear-gradient(135deg,var(--accent) 50%,transparent 50%);background-position:calc(100% - 18px) 21px,calc(100% - 13px) 21px;background-size:5px 5px;background-repeat:no-repeat}
+.field select option{background:var(--surface);color:var(--ink)}
+.field input::placeholder{color:color-mix(in srgb,var(--muted) 78%,transparent)}
+.field input:focus,.field select:focus{border-color:var(--accent)}
+.field input[aria-invalid="true"]{border-color:var(--danger)}
+.field__err{display:none;margin-top:5px;color:var(--danger);font-size:.65rem}
+.field input[aria-invalid="true"]+.field__err{display:block}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{min-height:44px;padding:10px 16px;border:1px solid var(--line);background:var(--field-bg);cursor:pointer;font-size:.72rem;font-weight:600;transition:.2s}
+.chip[aria-pressed="true"]{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 16%,transparent);color:var(--accent-2)}
+.upload{position:relative;display:flex;align-items:center;gap:14px;padding:16px;border:1px dashed color-mix(in srgb,var(--accent) 55%,var(--line));background:color-mix(in srgb,var(--accent) 5%,transparent);cursor:pointer}
+.upload input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.upload__icon{flex:0 0 40px;height:40px;display:grid;place-items:center;border:1px solid var(--line);color:var(--accent)}
+.upload__title{font-size:.78rem;font-weight:600}
+.upload__desc{color:var(--muted);font-size:.66rem}
+.upload.is-filled{border-style:solid;border-color:var(--accent)}
+.consent{display:flex;align-items:flex-start;gap:10px;color:var(--muted);font-size:.68rem;line-height:1.45}
+.consent input{flex:0 0 auto;width:18px;height:18px;margin-top:1px;accent-color:var(--accent)}
+.consent a{color:var(--accent);text-decoration:underline}
+.consent.is-error{color:var(--danger)}
+
+/* итог */
+.done{text-align:left}
+.done__icon{width:56px;height:56px;display:grid;place-items:center;margin-bottom:22px;border:1px solid var(--accent);color:var(--accent)}
+.summary{margin:26px 0 0;border:1px solid var(--line)}
+.summary div{display:grid;grid-template-columns:minmax(0,13rem) minmax(0,1fr);gap:12px;padding:11px 16px;border-bottom:1px solid var(--line-soft);font-size:.72rem}
+.summary div:last-child{border-bottom:0}
+.summary dt{color:var(--muted)}
+.summary dd{margin:0}
+
+/* боковая колонка */
+.aside{display:flex;flex-direction:column;gap:14px;position:sticky;top:calc(var(--header) + 20px)}
+.aside-card{padding:22px;border:1px solid var(--line);background:var(--card-bg)}
+.aside-card h3{margin:0 0 14px;font-size:.66rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)}
+.aside-list{margin:0;padding:0;list-style:none;display:grid;gap:12px}
+.aside-list li{display:grid;grid-template-columns:22px 1fr;gap:8px;font-size:.74rem;line-height:1.45}
+.aside-list li::before{content:"+";color:var(--accent);font-weight:300;font-size:1rem;line-height:1.1}
+.aside-list b{display:block;font-weight:600}
+.aside-list span{color:var(--muted);font-size:.68rem}
+.aside-contacts a{display:block;color:var(--accent);font-weight:600;font-size:.86rem}
+.aside-contacts p{margin:6px 0 0;color:var(--muted);font-size:.68rem}
+
+/* подвал */
+.site-footer{padding:40px 0 calc(40px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);background:var(--footer-bg);color:var(--footer-muted);font-size:.68rem;line-height:1.6}
+.footer-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:28px}
+.site-footer .brand__text{font-size:.72rem}
+.site-footer strong{display:block;margin-bottom:6px;color:#f7efe4;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase}
+.site-footer a{color:var(--accent)}
+.footer-legal{margin-top:24px;padding-top:18px;border-top:1px solid var(--line-soft)}
+
+.screen{animation:fade .3s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.screen{animation:none}.progress__bar{transition:none}}
+
+/* ---------- адаптив ---------- */
+@media (max-width:1100px){
+  .quiz-grid{grid-template-columns:1fr}
+  .aside{position:static;display:grid;grid-template-columns:1fr 1fr}
+  .header-hours{display:none}
+}
+@media (max-width:767px){
+  :root{--header:4.125rem}
+  .container{width:min(100% - var(--gutter-sm)*2,var(--max))}
+  .brand img{height:32px}
+  .brand__text{font-size:.62rem;letter-spacing:.06em}
+  .brand{gap:.55rem}
+  .header-phone{display:none}
+  .header-call{display:inline-flex}
+  .fork{grid-template-columns:1fr}
+  .fork-card{padding:20px}
+  .options,.form-grid{grid-template-columns:1fr}
+  .aside{grid-template-columns:1fr}
+  .quiz{border-inline:0;margin-inline:calc(var(--gutter-sm)*-1)}
+  .quiz__top,.quiz__body{padding-inline:var(--gutter-sm)}
+  .quiz__nav{position:sticky;bottom:0;z-index:20;padding:12px var(--gutter-sm) calc(12px + env(safe-area-inset-bottom,0px));background:var(--header-bg);backdrop-filter:blur(14px)}
+  .quiz__nav .btn{flex:1}
+  .quiz__nav .btn--ghost{flex:0 0 auto}
+  .nav-note{display:none}
+  .summary div{grid-template-columns:1fr;gap:2px}
+  .footer-grid{grid-template-columns:1fr}
+  .intro__lead{font-size:.82rem}
+}
+@media (min-width:768px){.field input,.field select{font-size:.85rem}}
+@media (max-width:380px){.q-title{font-size:1rem;hyphens:auto;overflow-wrap:anywhere}.fork-card h2{font-size:.95rem}}
+@media (max-width:28.875rem){
+  .container{width:min(100% - var(--gutter-xs)*2,var(--max))}
+  .quiz{margin-inline:calc(var(--gutter-xs)*-1)}
+  .quiz__top,.quiz__body{padding-inline:var(--gutter-xs)}
+  .quiz__nav{padding-inline:var(--gutter-xs)}
+}
+
+/* v2: первый экран без развилки */
+.intro{padding:clamp(40px,6vw,84px) 0 clamp(32px,4.5vw,60px)}
+.intro__actions{display:flex;flex-wrap:wrap;align-items:center;gap:14px 20px;margin:0 0 30px}
+.intro__note{color:var(--muted);font-size:.68rem;letter-spacing:.04em}
+.facts{margin-top:0}
+.opt__flag{display:inline-block;margin-left:8px;padding:2px 7px;border:1px solid color-mix(in srgb,var(--accent) 58%,transparent);color:var(--accent-2);font-size:.55rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;vertical-align:2px}
+@media (max-width:767px){.intro__actions .btn{width:100%}}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="https://terragrande.ru/" aria-label="ТЕРРАГРАНДЭ, главная"><img src="data:image/webp;base64,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" alt="" width="51" height="42"><span class="brand__text">ТЕРРАГРАНДЭ</span></a>
+    <div class="header-contact">
+      <span class="header-hours">Пн–Пт 9:00–18:00</span>
+      <a class="header-phone" href="tel:+79780080809">+7 (978) 008-08-09</a>
+      <a class="header-call" href="tel:+79780080809" aria-label="Позвонить"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg></a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="intro" id="intro">
+    <div class="intro__bg" aria-hidden="true"></div>
+    <div class="container">
+      <p class="kicker">Изыскания + проект + экспертиза одним договором</p>
+      <h1 id="h1">Изыскания и проектирование наружных сетей и инженерных сооружений</h1>
+      <p class="intro__lead">КОС, ВОС, КНС, ВНС, РЧВ, ЛОС, водопроводы, канализация и газопроводы. Полный комплекс проектно-изыскательских работ своими силами. Ответьте на 7 вопросов: инженер пришлёт состав работ, сроки и вилку стоимости в течение 4 часов в рабочее время.</p>
+      <div class="intro__actions">
+        <a class="btn btn--accent" href="#quiz" id="cta">Начать расчёт</a>
+        <span class="intro__note">7 вопросов · около 2 минут</span>
+      </div>
+      <div class="facts"><div class="fact"><strong>Проект под ключ</strong>Изыскания и проектирование своими силами</div><div class="fact"><strong>Гарантия положительного заключения</strong>Государственной и негосударственной экспертизы</div><div class="fact"><strong>СРО и госконтракты</strong>Проектирование и изыскания · 44-ФЗ и 223-ФЗ</div></div>
+    </div>
+  </section>
+
+  <section class="quiz-wrap" id="quiz-wrap">
+    <div class="container quiz-grid">
+      <div class="quiz" id="quiz" aria-live="polite">
+        <div class="quiz__top">
+          <span class="quiz__mode" id="quiz-mode"></span>
+          <span class="quiz__count" id="quiz-count"></span>
+        </div>
+        <div class="progress" aria-hidden="true"><div class="progress__bar" id="progress"></div></div>
+        <div class="quiz__body" id="quiz-body"></div>
+        <div class="quiz__nav" id="quiz-nav">
+          <button class="btn btn--ghost" type="button" id="btn-back">← Назад</button>
+          <span class="nav-note" id="nav-note"></span>
+          <button class="btn btn--accent" type="button" id="btn-next">Далее →</button>
+        </div>
+      </div>
+
+      <aside class="aside" aria-label="Что вы получите">
+        <div class="aside-card">
+          <h3>Что вы получите</h3>
+          <ul class="aside-list" id="aside-list"></ul>
+        </div>
+        <div class="aside-card aside-contacts">
+          <h3>Удобнее позвонить?</h3>
+          <a href="tel:+79780080809">+7 (978) 008-08-09</a>
+          <a href="mailto:Terragrande@yandex.ru">Terragrande@yandex.ru</a>
+          <p>Пн–Пт 09:00–18:00 · Симферополь</p>
+        </div>
+      </aside>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <a class="brand" href="https://terragrande.ru/"><img src="data:image/webp;base64,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" alt="" width="39" height="32" style="height:32px"><span class="brand__text">ТЕРРАГРАНДЭ</span></a>
+        <p style="margin:14px 0 0">ООО «ТЕРРАГРАНДЭ»<br>ИНН 9102248180 · КПП 910201001<br>ОГРН 1189112035518</p>
+      </div>
+      <div>
+        <strong>СРО</strong>
+        Проектирование: СРО-П-156-06072010<br>Изыскания: СРО-И-006-09112009
+      </div>
+      <div>
+        <strong>Контакты</strong>
+        <a href="tel:+79780080809">+7 (978) 008-08-09</a><br>
+        <a href="mailto:Terragrande@yandex.ru">Terragrande@yandex.ru</a><br>
+        Пн–Пт: 09:00–18:00<br>
+        295026, Республика Крым, г. Симферополь, ул. Набережная имени 60-летия СССР, д. 69В
+      </div>
+    </div>
+    <div class="footer-legal">© 2026 ООО «ТЕРРАГРАНДЭ». Информация не является публичной офертой. · <a href="https://terragrande.ru/privacy.html">Политика конфиденциальности</a></div>
+  </div>
+</footer>
+
+<script>
+(function(){
+"use strict";
+var PAGE = "engineer";   /* engineer | engineer_lite | business | business_lite */
+
+/* ===== Данные квизов (04-quiz/cowork/04_два-квиза-черновик-v3.md + 05_правки-квизов-v3.md) ===== */
+var UNSURE = {v:"unsure", t:"Не знаю, подскажите", unsure:true};
+
+var CAPACITY = {
+  flow: {hint:"Производительность в м³ в сутки.", opts:[
+    {v:"lt50",t:"До 50 м³/сут"},{v:"50-200",t:"50–200 м³/сут"},{v:"200-1000",t:"200–1 000 м³/сут"},
+    {v:"1000-5000",t:"1 000–5 000 м³/сут"},{v:"gt5000",t:"Больше 5 000 м³/сут"},{v:"unsure",t:"Уточним по ТЗ",unsure:true}]},
+  pump: {hint:"Подача насосной станции в м³ в час.", opts:[
+    {v:"lt100",t:"До 100 м³/ч"},{v:"100-500",t:"100–500 м³/ч"},{v:"gt500",t:"Больше 500 м³/ч"},{v:"unsure",t:"Уточним по ТЗ",unsure:true}]},
+  length: {hint:"Общая протяжённость трассы.", opts:[
+    {v:"lt1",t:"До 1 км"},{v:"1-5",t:"1–5 км"},{v:"5-20",t:"5–20 км"},{v:"gt20",t:"Больше 20 км"},{v:"unsure",t:"Уточним по ТЗ",unsure:true}]},
+  volume: {hint:"Общий объём резервуаров.", opts:[
+    {v:"lt100",t:"До 100 м³"},{v:"100-500",t:"100–500 м³"},{v:"500-2000",t:"500–2 000 м³"},{v:"gt2000",t:"Больше 2 000 м³"},{v:"unsure",t:"Уточним по ТЗ",unsure:true}]}
+};
+var CAP_BY_OBJECT = {kos:"flow",los:"flow",vos:"flow",rchv:"volume",kns:"pump",net:"length",gas:"length"};
+
+var ENG_OBJECTS = [
+        {v:"kos",t:"КОС",d:"Канализационные очистные сооружения"},
+        {v:"los",t:"ЛОС",d:"Ливневые очистные, ливневая канализация"},
+        {v:"vos",t:"Водозабор, ЗСО, ВОС",d:"Водозаборные узлы, зоны санитарной охраны, водоподготовка"},
+        {v:"rchv",t:"РЧВ",d:"Резервуары чистой воды"},
+        {v:"kns",t:"КНС / ВНС",d:"Канализационные и водопроводные насосные станции"},
+        {v:"net",t:"Водопровод и канализация",d:"Водоводы, коллекторы, наружные сети ВК"},
+        {v:"gas",t:"Газопроводы",d:"Наружные сети газоснабжения"},
+        {v:"izy",t:"Инженерные изыскания",d:"Геодезия, геология, экология, гидрометеорология"},
+        {v:"complex",t:"Комплекс",d:"Несколько сетей и сооружений одним проектом"}];
+var H1_BY_OBJECT = {
+      kos:"Изыскания и проектирование КОС",
+      los:"Изыскания и проектирование ЛОС и ливневой канализации",
+      vos:"Изыскания и проектирование водозаборов, ЗСО и ВОС",
+      rchv:"Изыскания и проектирование резервуаров чистой воды",
+      kns:"Изыскания и проектирование КНС и ВНС",
+      net:"Изыскания и проектирование наружных сетей водоснабжения и канализации",
+      gas:"Изыскания и проектирование наружных газопроводов",
+      izy:"Инженерные изыскания под проект"};
+var BIZ_OBJECTS = [
+        {v:"residential",t:"Жилой комплекс",d:"Или коттеджный посёлок"},
+        {v:"commercial",t:"Коммерческий объект",d:"Торговля, офисы, курортный комплекс"},
+        {v:"industrial",t:"Производство, склад",d:"Логистический комплекс"},
+        {v:"roadside",t:"АЗС, автосервис, парковка"},
+        {v:"social",t:"Социальный объект",d:"Школа, поликлиника, спорт"},
+        {v:"other",t:"Другое"},
+        {v:"private",t:"Частный дом или дача",stop:true}];
+var BIZ_NETWORKS = [
+        {v:"water",t:"Водоснабжение",d:"Водопровод, скважина, водозабор"},
+        {v:"sewer",t:"Канализация",d:"Подключение к сетям или свои очистные"},
+        {v:"storm",t:"Ливневая канализация",d:"Отвод дождевых стоков, ЛОС"},
+        {v:"gas",t:"Газ",d:"Наружный газопровод"},
+        {v:"unsure",t:"Не знаю, нужен совет",unsure:true,exclusive:true}];
+
+var QUIZ = {
+  engineer: {
+    kind: "engineer",
+    mode: "Инженерный расчёт",
+    goalPrefix: "eng_",
+    aside: [
+      ["Состав работ","виды изысканий и разделы проекта"],
+      ["Сроки по стадиям","изыскания, П, экспертиза, Р"],
+      ["Вилку стоимости","под ваше ТЗ или закупку"],
+      ["Ответ в течение 4 часов","в рабочее время, Пн–Пт 9–18"]
+    ],
+    h1ByObject: H1_BY_OBJECT,
+    steps: [
+      {id:"object", title:"Что нужно спроектировать?", hint:"Выберите основной объект. Остальное уточним в разговоре.", options:ENG_OBJECTS},
+      {id:"capacity", title:"Какая производительность?", skip:function(a){return a.object==="complex"||a.object==="izy";},
+        dynTitle:function(a){var k=CAP_BY_OBJECT[a.object]; return k==="length"?"Какая протяжённость?":k==="volume"?"Какой объём?":"Какая производительность?";},
+        dynHint:function(a){return (CAPACITY[CAP_BY_OBJECT[a.object]]||CAPACITY.flow).hint;},
+        dynOptions:function(a){return (CAPACITY[CAP_BY_OBJECT[a.object]]||CAPACITY.flow).opts;}},
+      {id:"scope", title:"Что нужно сделать?", hint:"Изыскания и проект одним договором: одна команда, одна ответственность.", options:[
+        {v:"IPR",t:"Изыскания + проект П и Р",d:"Полный цикл, одним договором",flag:"Рекомендуем"},
+        {v:"IP",t:"Изыскания + стадия П"},
+        {v:"PR",t:"Проект П и Р",d:"Изыскания уже есть"},
+        {v:"R",t:"Только рабочая документация"},
+        {v:"I",t:"Только изыскания"},
+        UNSURE]},
+      {id:"work", title:"Вид работ", options:[
+        {v:"new",t:"Новое строительство"},{v:"recon",t:"Реконструкция"},
+        {v:"capital",t:"Капитальный ремонт"},{v:"tech",t:"Техническое перевооружение"},UNSURE]},
+      {id:"source", title:"Какие исходные данные уже есть?", hint:"Можно выбрать несколько.", multi:true, options:[
+        {v:"tu",t:"Технические условия (ТУ)"},{v:"gpzu",t:"ГПЗУ или ППТ"},
+        {v:"tz",t:"Утверждённое ТЗ"},{v:"old_survey",t:"Изыскания прошлых лет"},
+        {v:"none",t:"Пока ничего",d:"Начинаем с нуля",exclusive:true}]},
+      {id:"expertise", title:"Какая нужна экспертиза?", options:[
+        {v:"state",t:"Государственная",d:"ГАУ РК или Главгосэкспертиза"},
+        {v:"private",t:"Негосударственная"},{v:"no",t:"Не требуется"},UNSURE]},
+      {id:"contract", title:"Как будет заключаться договор?", options:[
+        {v:"tender",t:"Закупка объявлена",d:"44-ФЗ или 223-ФЗ"},
+        {v:"nmck",t:"Готовим закупку",d:"Нужен расчёт НМЦК"},
+        {v:"commercial",t:"Коммерческий договор"},
+        {v:"sub",t:"Субподряд",d:"По договору «проект + стройка»"}]}
+    ]
+  },
+  business: {
+    kind: "business",
+    mode: "Расчёт для заказчика",
+    goalPrefix: "biz_",
+    aside: [
+      ["Ориентир стоимости","изысканий и проекта сетей и сооружений"],
+      ["Что нужно объекту","ТУ, изыскания, экспертиза, согласования"],
+      ["План и сроки","что делать и в каком порядке"],
+      ["Ответ в течение 4 часов","в рабочее время, Пн–Пт 9–18"]
+    ],
+    steps: [
+      {id:"object", title:"Что у вас за объект?", options:BIZ_OBJECTS},
+      {id:"networks", title:"Какие сети нужны объекту?", hint:"Можно выбрать несколько.", multi:true, options:BIZ_NETWORKS},
+      {id:"situation", title:"Что сейчас с подключением?", options:[
+        {v:"have_tu",t:"Получили ТУ, нужен проект"},
+        {v:"need_tu",t:"ТУ ещё нет",d:"Нужно понять, куда и как подключаться"},
+        {v:"no_networks",t:"Сетей рядом нет",d:"Нужны свои очистные, водозабор, резервуар"},
+        {v:"overload",t:"Старые сети не справляются",d:"Или есть предписание"},
+        UNSURE]},
+      {id:"people", title:"Сколько людей будет на объекте?", hint:"Жильцы, сотрудники и гости одновременно. Точный расчёт сделает инженер.", options:[
+        {v:"lt50",t:"До 50"},{v:"50-300",t:"50–300"},{v:"300-1000",t:"300–1 000"},
+        {v:"gt1000",t:"Больше 1 000"},UNSURE]},
+      {id:"stage", title:"На каком вы этапе?", options:[
+        {v:"site",t:"Выбираем участок",d:"Хотим понять затраты до покупки"},
+        {v:"concept",t:"Участок есть",d:"Готовим концепцию"},
+        {v:"building",t:"Есть проект здания",d:"Нужны сети и сооружения"},
+        {v:"construction",t:"Стройка уже идёт"},
+        {v:"operating",t:"Объект работает"}]},
+      {id:"timing", title:"Когда нужен результат?", options:[
+        {v:"urgent",t:"Срочно, в ближайший месяц"},{v:"3m",t:"В течение 3 месяцев"},
+        {v:"year",t:"В течение года"},{v:"pricing",t:"Пока прицениваемся"}]}
+    ]
+  },
+  engineer_lite: {
+    kind: "engineer", lite: true,
+    mode: "Быстрый расчёт",
+    goalPrefix: "engl_",
+    aside: [
+      ["Звонок инженера","уточнит детали за 5–10 минут"],
+      ["Состав работ и сроки","изыскания и проект"],
+      ["Вилку стоимости","под ваш объект"],
+      ["Ответ в течение 4 часов","в рабочее время, Пн–Пт 9–18"]
+    ],
+    h1ByObject: H1_BY_OBJECT,
+    steps: [
+      {id:"object", title:"Что нужно спроектировать?", hint:"Выберите основной объект.", options:ENG_OBJECTS},
+      {id:"scope", title:"Что нужно сделать?", options:[
+        {v:"IP",t:"Изыскания и проект",d:"Полный цикл, одним договором",flag:"Рекомендуем"},
+        {v:"P",t:"Только проект",d:"Изыскания уже есть"},
+        {v:"I",t:"Только изыскания"},
+        UNSURE]},
+      {id:"docs", title:"Что уже есть на руках?", options:[
+        {v:"tz",t:"ТЗ или технические условия"},
+        {v:"tender",t:"Объявленная закупка",d:"44-ФЗ или 223-ФЗ"},
+        {v:"idea",t:"Только задача",d:"Документов пока нет"}]},
+      {id:"timing", title:"Когда нужно начать?", options:[
+        {v:"urgent",t:"В ближайший месяц"},{v:"quarter",t:"В течение квартала"},
+        {v:"later",t:"Позже",d:"Пока считаем бюджет"}]}
+    ]
+  },
+  business_lite: {
+    kind: "business", lite: true,
+    mode: "Быстрый расчёт",
+    goalPrefix: "bizl_",
+    aside: [
+      ["Ориентир стоимости","изысканий и проекта сетей"],
+      ["Что нужно объекту","ТУ, изыскания, экспертиза"],
+      ["Звонок инженера","без навязчивых продаж"],
+      ["Ответ в течение 4 часов","в рабочее время, Пн–Пт 9–18"]
+    ],
+    steps: [
+      {id:"object", title:"Что у вас за объект?", options:BIZ_OBJECTS},
+      {id:"networks", title:"Какие сети нужны?", hint:"Можно выбрать несколько.", multi:true, options:BIZ_NETWORKS},
+      {id:"tu", title:"Есть технические условия (ТУ)?", hint:"ТУ выдаёт водоканал или газовая служба на подключение.", options:[
+        {v:"yes",t:"Да, ТУ есть"},{v:"no",t:"Нет, ещё не получали"},UNSURE]},
+      {id:"timing", title:"Когда нужен результат?", options:[
+        {v:"urgent",t:"Срочно, в ближайший месяц"},{v:"3m",t:"В течение 3 месяцев"},
+        {v:"later",t:"Пока прицениваемся"}]}
+    ]
+  }
+};
+
+/* ===== Состояние ===== */
+var Q = QUIZ[PAGE];
+var params = new URLSearchParams(location.search);
+var state = {idx:0, answers:{}, contact:{messenger:"call"}, file:null, done:false, started:false};
+
+var $ = function(id){return document.getElementById(id);};
+var body=$("quiz-body"), nav=$("quiz-nav"), btnBack=$("btn-back"), btnNext=$("btn-next"), note=$("nav-note");
+
+function goal(name, extra){
+  /* Цели Метрики: подключит кодовый агент (ym(ID,'reachGoal',name)). Имена: eng_* и biz_*. */
+  name = Q.goalPrefix + name;
+  if (typeof window.ym === "function" && window.TG_YM_ID) window.ym(window.TG_YM_ID,"reachGoal",name,extra||{});
+  console.info("[goal]", name, extra||"");
+}
+function goalRaw(name, extra){
+  if (typeof window.ym === "function" && window.TG_YM_ID) window.ym(window.TG_YM_ID,"reachGoal",name,extra||{});
+  console.info("[goal]", name, extra||"");
+}
+function steps(){ return Q.steps.filter(function(s){return !(s.skip && s.skip(state.answers));}); }
+function total(){ return steps().length + 1; }
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+
+function mapCampaign(c){
+  if(!c) return null; c=c.toLowerCase();
+  var m=[["kos","kos"],["los","los"],["livn","los"],["vos","vos"],["vzu","vos"],["kns","kns"],["vns","kns"],
+         ["seti","net"],["vk","net"],["voda","net"],["kanal","net"],["gaz","gas"],["gas","gas"],
+         ["elektr","el"],["lep","el"],["svyaz","com"],["vols","com"]];
+  for (var i=0;i<m.length;i++) if (c.indexOf(m[i][0])>-1) return m[i][1];
+  return null;
+}
+
+/* ===== Подстройка под кампанию (только инженерный) ===== */
+if (Q.h1ByObject) {
+  var obj = params.get("object") || mapCampaign(params.get("utm_campaign"));
+  if (obj && Q.h1ByObject[obj]) {
+    state.answers.object = obj;
+    $("h1").textContent = Q.h1ByObject[obj];
+  }
+}
+$("quiz-mode").textContent = Q.mode;
+$("aside-list").innerHTML = Q.aside.map(function(a){return "<li><div><b>"+esc(a[0])+"</b><span>"+esc(a[1])+"</span></div></li>";}).join("");
+
+/* ===== Отрисовка шага ===== */
+function render(){
+  var list = steps(), n = total();
+  var isFinal = state.idx >= list.length;
+  $("quiz-count").textContent = "Шаг " + Math.min(state.idx+1,n) + " из " + n;
+  $("progress").style.width = Math.round(state.idx / n * 100) + "%";
+  btnBack.hidden = state.idx===0;
+  nav.hidden = false;
+  if (isFinal) return renderFinal();
+  var s = list[state.idx];
+  var opts = s.dynOptions ? s.dynOptions(state.answers) : s.options;
+  var hint = s.dynHint ? s.dynHint(state.answers) : (s.hint||"");
+  var title = s.dynTitle ? s.dynTitle(state.answers) : s.title;
+  var val = state.answers[s.id];
+  var html = '<div class="screen"><h2 class="q-title">'+esc(title)+'</h2><p class="q-hint">'+esc(hint||"Выберите один вариант.")+'</p>'+
+    '<div class="options" role="'+(s.multi?"group":"radiogroup")+'" aria-label="'+esc(title)+'">';
+  opts.forEach(function(o){
+    var on = s.multi ? (Array.isArray(val) && val.indexOf(o.v)>-1) : val===o.v;
+    html += '<button type="button" class="opt'+(s.multi?" opt--multi":"")+(o.unsure?" opt--unsure":"")+'" data-v="'+esc(o.v)+'" '+(s.multi?'role="checkbox" aria-checked="'+on+'"':'role="radio" aria-pressed="'+on+'" aria-checked="'+on+'"')+'>'+
+      '<span class="opt__mark" aria-hidden="true"></span><span class="opt__text"><span class="opt__title">'+esc(o.t)+(o.flag?'<span class="opt__flag">'+esc(o.flag)+'</span>':'')+'</span>'+(o.d?'<span class="opt__desc">'+esc(o.d)+'</span>':'')+'</span></button>';
+  });
+  html += '</div></div>';
+  body.innerHTML = html;
+  note.textContent = s.multi ? "Можно несколько" : "";
+  btnNext.textContent = "Далее →";
+  updateNext();
+
+  body.querySelectorAll(".opt").forEach(function(b){
+    b.addEventListener("click", function(){
+      if (!state.started){ state.started=true; goal("start"); }
+      var v=b.getAttribute("data-v");
+      if (s.multi) {
+        var arr = Array.isArray(state.answers[s.id]) ? state.answers[s.id].slice() : [];
+        var opt = opts.filter(function(o){return o.v===v;})[0];
+        var i = arr.indexOf(v);
+        if (i>-1) arr.splice(i,1);
+        else {
+          if (opt.exclusive) arr=[];
+          else arr = arr.filter(function(x){ return !opts.some(function(o){return o.v===x && o.exclusive;}); });
+          arr.push(v);
+        }
+        state.answers[s.id]=arr;
+        body.querySelectorAll(".opt").forEach(function(x){x.setAttribute("aria-checked", arr.indexOf(x.getAttribute("data-v"))>-1);});
+        updateNext();
+      } else {
+        var picked = opts.filter(function(o){return o.v===v;})[0];
+        if (picked && picked.stop){ state.answers[s.id]=v; renderStop(); return; }
+        var changedObject = (s.id==="object" && state.answers.object!==v);
+        state.answers[s.id]=v;
+        if (changedObject) delete state.answers.capacity;
+        body.querySelectorAll(".opt").forEach(function(x){var on=x===b; x.setAttribute("aria-pressed",on); x.setAttribute("aria-checked",on);});
+        updateNext();
+        setTimeout(next, 260);
+      }
+    });
+  });
+}
+
+function updateNext(){
+  var list=steps();
+  if (state.idx>=list.length) return;
+  var s=list[state.idx], v=state.answers[s.id];
+  btnNext.disabled = s.multi ? !(Array.isArray(v)&&v.length) : !v;
+}
+
+/* ===== Контакты ===== */
+var UPLOAD_ICON='<span class="upload__icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 16V4m0 0-4 4m4-4 4 4M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg></span>';
+function renderFinal(){
+  var eng = Q.kind==="engineer", lite = !!Q.lite;
+  var tender = eng && (state.answers.contract==="tender" || state.answers.contract==="nmck" || state.answers.docs==="tender");
+  var c = state.contact;
+  var html = '<div class="screen"><h2 class="q-title">'+(eng?"Куда прислать состав работ и стоимость?":"Куда прислать ориентир стоимости?")+'</h2>'+
+    '<p class="q-hint">'+(lite?"Оставьте телефон: инженер перезвонит или напишет, уточнит детали и в течение 4 часов в рабочее время пришлёт "+(eng?"состав работ и вилку стоимости.":"ориентир стоимости."):eng?"Инженер разберёт ответы и в течение 4 часов в рабочее время пришлёт состав работ, сроки и вилку стоимости.":"Инженер посмотрит ответы и в течение 4 часов в рабочее время пришлёт ориентир стоимости и план действий.")+'</p>'+
+    '<form class="form-grid" id="lead" novalidate>';
+  var engDocs = '';
+  if (eng) {
+    engDocs += '<label class="upload field--full" id="upload"><input type="file" id="f-file" accept=".pdf,.doc,.docx,.xls,.xlsx,.dwg,.zip,.rar,.jpg,.png">'+UPLOAD_ICON+
+      '<span><span class="upload__title" id="upload-title">Прикрепите ТЗ, ТУ или опросный лист</span><br><span class="upload__desc" id="upload-desc">PDF, Word, Excel, DWG, архив до 20 МБ. С файлом ответим точнее</span></span></label>';
+    engDocs += '<div class="field field--full"'+(tender?'':' hidden')+'><label for="f-tender">Ссылка на закупку</label><input id="f-tender" type="url" inputmode="url" placeholder="zakupki.gov.ru/…" value="'+esc(c.tender||"")+'"></div>';
+    if (!lite) html += engDocs;
+    if (!lite) html += '<div class="field"><label for="f-org">Организация</label><input id="f-org" type="text" autocomplete="organization" placeholder="Необязательно" value="'+esc(c.org||"")+'"></div>';
+  }
+  if (!lite) html += '<div class="field'+(eng?'':' field--full')+'"><label for="f-region">Где объект</label><select id="f-region">'+
+    ['','Южный берег Крыма','Симферополь и центр Крыма','Запад Крыма','Восток Крыма','Севастополь','Краснодарский край','Ростовская область','Другой регион юга России','Москва и Московская область','Алтайский край','Другой регион России'].map(function(r){return '<option value="'+esc(r)+'"'+(c.region===r?' selected':'')+'>'+(r||"Выберите регион")+'</option>';}).join("")+
+    '</select></div>';
+  html += '<div class="field"><label for="f-name">Имя</label><input id="f-name" type="text" autocomplete="name" placeholder="'+(lite?"Необязательно":"Как к вам обращаться")+'" value="'+esc(c.name||"")+'"><span class="field__err">Напишите, как к вам обращаться</span></div>';
+  html += '<div class="field"><label for="f-phone">Телефон</label><input id="f-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__" value="'+esc(c.phone||"")+'"><span class="field__err">Проверьте номер телефона</span></div>';
+  html += '<div class="field field--full"><span class="label">Как удобнее связаться</span><div class="chips" role="radiogroup" aria-label="Способ связи">'+
+    [["call","Звонок"],["telegram","Telegram"],["max","MAX"],["whatsapp","WhatsApp"]].map(function(m){return '<button type="button" class="chip" data-m="'+m[0]+'" aria-pressed="'+(c.messenger===m[0])+'">'+m[1]+'</button>';}).join("")+
+    '</div></div>';
+  if (eng && lite) html += engDocs;
+  if (!eng && !lite) {
+    html += '<label class="upload field--full" id="upload"><input type="file" id="f-file" accept=".pdf,.doc,.docx,.jpg,.png,.zip">'+UPLOAD_ICON+
+      '<span><span class="upload__title" id="upload-title">Есть ТУ или документы по участку?</span><br><span class="upload__desc" id="upload-desc">Необязательно. Прикрепите, если есть</span></span></label>';
+  }
+  html += '<label class="consent field--full" id="consent"><input type="checkbox" id="f-consent"'+(c.consent?' checked':'')+'><span>Согласен на <a href="https://terragrande.ru/privacy.html" target="_blank" rel="noopener">обработку персональных данных</a></span></label>';
+  html += '</form></div>';
+  body.innerHTML = html;
+  note.textContent = "";
+  btnNext.textContent = eng ? "Получить расчёт" : "Получить ориентир";
+  btnNext.disabled = false;
+
+  var phone=$("f-phone");
+  phone.addEventListener("input", function(){ phone.value = maskPhone(phone.value); phone.removeAttribute("aria-invalid"); });
+  $("f-name").addEventListener("input", function(){ this.removeAttribute("aria-invalid"); });
+  $("f-consent").addEventListener("change", function(){ $("consent").classList.remove("is-error"); });
+  body.querySelectorAll(".chip").forEach(function(ch){
+    ch.addEventListener("click", function(){ state.contact.messenger=ch.getAttribute("data-m");
+      body.querySelectorAll(".chip").forEach(function(x){x.setAttribute("aria-pressed", x===ch);}); });
+  });
+  var file=$("f-file");
+  if (file) file.addEventListener("change", function(){
+    var f=file.files[0]; if(!f) return;
+    if (f.size > 20*1024*1024) { $("upload-desc").textContent="Файл больше 20 МБ. Пришлите его на почту после заявки"; file.value=""; return; }
+    state.file={name:f.name,size:f.size};
+    $("upload").classList.add("is-filled");
+    $("upload-title").textContent=f.name;
+    $("upload-desc").textContent=(f.size/1024/1024).toFixed(1).replace(".",",")+" МБ · нажмите, чтобы заменить";
+    goal("file");
+  });
+  $("lead").addEventListener("submit", function(e){e.preventDefault(); submit();});
+}
+
+function maskPhone(v){
+  var d=v.replace(/\D/g,"");
+  if (!d) return "";
+  if (d[0]==="8") d="7"+d.slice(1);
+  if (d[0]!=="7") d="7"+d;
+  d=d.slice(0,11);
+  var r="+7";
+  if (d.length>1) r+=" ("+d.slice(1,4);
+  if (d.length>4) r+=") "+d.slice(4,7);
+  if (d.length>7) r+="-"+d.slice(7,9);
+  if (d.length>9) r+="-"+d.slice(9,11);
+  return r;
+}
+
+function collectContact(){
+  var c=state.contact;
+  ["name","phone","org","region","tender"].forEach(function(k){ var el=$("f-"+k); if(el) c[k]=el.value.trim(); });
+  c.consent = $("f-consent").checked;
+}
+
+function submit(){
+  collectContact();
+  var c=state.contact, ok=true;
+  if (!Q.lite && c.name.length<2){ $("f-name").setAttribute("aria-invalid","true"); ok=false; }
+  if (c.phone.replace(/\D/g,"").length!==11){ $("f-phone").setAttribute("aria-invalid","true"); ok=false; }
+  if (!c.consent){ $("consent").classList.add("is-error"); ok=false; }
+  if (!ok){ var bad=body.querySelector('[aria-invalid="true"]')||$("f-consent"); bad.focus(); return; }
+  var payload = {
+    quiz_type: PAGE,
+    answers: readable(),
+    answers_raw: state.answers,
+    contact: c,
+    file: state.file,
+    page: location.href,
+    utm: ["utm_source","utm_medium","utm_campaign","utm_content","utm_term"].reduce(function(o,k){ if(params.get(k)) o[k]=params.get(k); return o; },{}),
+    yclid: params.get("yclid") || null,
+    sent_at: new Date().toISOString()
+  };
+  /* ПРОТОТИП: заявка не отправляется. Здесь будет POST на обработчик (задача кодового агента). */
+  console.log("[lead payload]", payload);
+  window.__lastLead = payload;
+  goal("submit");
+  goalRaw("quiz_lead", {quiz:PAGE});   /* общая цель для всех четырёх квизов */
+  state.done=true;
+  renderDone(payload);
+}
+
+function readable(){
+  var out=[];
+  steps().forEach(function(s){
+    var opts = s.dynOptions ? s.dynOptions(state.answers) : s.options;
+    var title = s.dynTitle ? s.dynTitle(state.answers) : s.title;
+    var v = state.answers[s.id]; if (v==null) return;
+    var vs = Array.isArray(v)?v:[v];
+    out.push([title, vs.map(function(x){var o=opts.filter(function(o){return o.v===x;})[0]; return o?o.t+(o.d&&s.id==="object"?" ("+o.d+")":""):x;}).join(", ")]);
+  });
+  return out;
+}
+
+function renderDone(p){
+  var eng=Q.kind==="engineer", lite=!!Q.lite;
+  $("quiz-count").textContent="Готово";
+  $("progress").style.width="100%";
+  nav.hidden = true;
+  var rows = p.answers.slice();
+  if (p.contact.region) rows.push(["Регион", p.contact.region]);
+  if (p.file) rows.push(["Файл", p.file.name]);
+  var mLabel={call:"Звонок",telegram:"Telegram",max:"MAX",whatsapp:"WhatsApp"}[p.contact.messenger];
+  rows.push(["Связь", mLabel+" · "+p.contact.phone]);
+  body.innerHTML = '<div class="screen done"><div class="done__icon" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m5 12 5 5 9-10"/></svg></div>'+
+    '<h2 class="q-title">Спасибо'+(p.contact.name?', '+esc(p.contact.name):'')+'! Заявка принята</h2>'+
+    '<p class="q-hint" style="margin:0">'+(lite?"Инженер перезвонит или напишет, уточнит детали и пришлёт "+(eng?"состав работ, сроки и вилку стоимости":"ориентир стоимости и план действий")+" в течение 4 часов в рабочее время.":eng?"Инженер разберёт данные и пришлёт состав работ, сроки и вилку стоимости в течение 4 часов в рабочее время.":"Инженер посмотрит ответы и пришлёт ориентир стоимости и план действий в течение 4 часов в рабочее время.")+
+    ' Работаем Пн–Пт с 9:00 до 18:00. Если заявка пришла вечером или в выходной, ответим в начале следующего рабочего дня.</p>'+
+    '<dl class="summary">'+rows.map(function(r){return '<div><dt>'+esc(r[0])+'</dt><dd>'+esc(r[1])+'</dd></div>';}).join("")+'</dl>'+
+    '<p class="q-hint" style="margin-top:22px">Срочный вопрос? Позвоните: <a href="tel:+79780080809" style="color:var(--accent);font-weight:600">+7 (978) 008-08-09</a></p></div>';
+  scrollToQuiz();
+}
+
+/* Частный дом: не наш заказчик. Вежливо завершаем, отдельная цель, в обучение стратегии не идёт. */
+function renderStop(){
+  goal("private");
+  $("quiz-count").textContent="";
+  $("progress").style.width="0%";
+  nav.hidden=true;
+  body.innerHTML='<div class="screen done"><h2 class="q-title">С частными домами мы не работаем</h2>'+
+    '<p class="q-hint" style="margin:0 0 22px">ТерраГрандэ проектирует наружные сети и инженерные сооружения для жилых комплексов, предприятий, коммерческих и муниципальных объектов. Для частного дома лучше обратиться к местной проектной организации или в вашу ресурсоснабжающую компанию.</p>'+
+    '<button type="button" class="btn" id="btn-restart">← Выбрать другой объект</button></div>';
+  $("btn-restart").addEventListener("click", function(){ delete state.answers.object; state.idx=0; render(); scrollToQuiz(); });
+  scrollToQuiz();
+}
+
+function scrollToQuiz(){
+  var qt=$("quiz").getBoundingClientRect().top;
+  if (qt<0 || qt>window.innerHeight*0.4) $("quiz").scrollIntoView({block:"start", behavior:"smooth"});
+}
+
+function next(){
+  var list=steps();
+  if (state.idx>=list.length){ submit(); return; }
+  var s=list[state.idx], v=state.answers[s.id];
+  if (s.multi ? !(Array.isArray(v)&&v.length) : !v) return;
+  if (!state.started){ state.started=true; goal("start"); }
+  goal("step_"+(Q.steps.indexOf(s)+1), {step:s.id});   /* номер закреплён за вопросом */
+  state.idx++;
+  render();
+  scrollToQuiz();
+}
+function back(){
+  if (state.idx>=steps().length) collectContact();
+  if (state.idx===0) return;
+  state.idx--; render();
+}
+btnNext.addEventListener("click", next);
+btnBack.addEventListener("click", back);
+$("cta").addEventListener("click", function(e){ e.preventDefault(); $("quiz").scrollIntoView({block:"start", behavior:"smooth"}); });
+
+render();
+})();
+</script>
+</body>
+</html>

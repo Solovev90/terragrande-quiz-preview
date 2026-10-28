@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Квизы TerraGrande · превью</title>
+<!-- Служебная страница превью квизов v3 · контур 04 · 2026-10-28. Не для рекламы. -->
+<style>
+:root{color-scheme:dark;--bg:#0c0806;--surface:#1a120e;--ink:#faf2e6;--muted:#ccb592;--line:rgba(224,186,118,.24);--accent:#e0ba76}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+main{max-width:46rem;margin:0 auto;padding:2rem 1rem 3rem}
+h1{font-size:1.5rem;margin:0 0 .25rem}
+h2{font-size:1.1rem;margin:0 0 .25rem}
+p{margin:.25rem 0;color:var(--muted)}
+a{color:var(--accent)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:.75rem;padding:1rem;margin-top:1rem}
+.card>a{font-weight:600;font-size:1.05rem}
+ul{list-style:none;padding:0;margin:.5rem 0 0;display:flex;flex-wrap:wrap;gap:.4rem}
+li a{display:inline-block;padding:.2rem .55rem;border:1px solid var(--line);border-radius:.4rem;text-decoration:none;font-size:.9rem}
+.note{margin-top:1.5rem;font-size:.9rem}
+</style>
+</head>
+<body>
+<main>
+<h1>Квизы TerraGrande · превью v3</h1>
+<p>Служебная страница для владельца и клиента. Заявки отсюда никуда не уходят: данные пишутся только в консоль браузера.</p>
+
+<div class="card">
+  <a href="engineer/">Инженерный · 7 вопросов</a>
+  <p>Изыскания и проектирование наружных сетей и сооружений. Кампании К1, К3.</p>
+  <p>Заголовок по объекту:</p>
+  <ul>
+    <li><a href="engineer/?object=kos">КОС</a></li>
+    <li><a href="engineer/?object=los">ЛОС</a></li>
+    <li><a href="engineer/?object=vos">ВОС, ЗСО</a></li>
+    <li><a href="engineer/?object=rchv">РЧВ</a></li>
+    <li><a href="engineer/?object=kns">КНС, ВНС</a></li>
+    <li><a href="engineer/?object=net">Сети ВК</a></li>
+    <li><a href="engineer/?object=gas">Газ</a></li>
+    <li><a href="engineer/?object=izy">Изыскания</a></li>
+    <li><a href="engineer/?utm_campaign=tg_kns_search">utm_campaign=…kns…</a></li>
+  </ul>
+</div>
+
+<div class="card">
+  <a href="engineer-lite/">Инженерный лёгкий · 4 вопроса</a>
+  <p>Быстрый расчёт: изыскания и проект наружных сетей и сооружений.</p>
+  <ul>
+    <li><a href="engineer-lite/?object=kos">КОС</a></li>
+    <li><a href="engineer-lite/?object=gas">Газ</a></li>
+    <li><a href="engineer-lite/?object=izy">Изыскания</a></li>
+  </ul>
+</div>
+
+<div class="card">
+  <a href="business/">Собственники и девелоперы · 6 вопросов</a>
+  <p>Сколько стоит подвести сети к объекту. Кампания К2.</p>
+</div>
+
+<div class="card">
+  <a href="business-lite/">Собственники и девелоперы лёгкий · 4 вопроса</a>
+  <p>Быстрый расчёт: сколько стоит подвести сети к объекту.</p>
+</div>
+
+<p class="note">Коды <code>?object=</code> работают в инженерных квизах: kos, los, vos, rchv, kns, net, gas, izy. Источник: контур 04, <code>04-quiz/vydacha/*-v3.html</code>.</p>
+</main>
+<script>
+/* При открытии с диска (file://) папка не открывает index.html сама: дописываем его в ссылки. */
+if (location.protocol === "file:") {
+  document.querySelectorAll('a[href]').forEach(function (a) {
+    var h = a.getAttribute("href");
+    if (/^[a-z-]+\/(\?|$)/.test(h)) a.setAttribute("href", h.replace("/", "/index.html"));
+  });
+}
+</script>
+</body>
+</html>
